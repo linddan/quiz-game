@@ -1,10 +1,22 @@
 <template>
     <section class="section">
         <div class="container">
-            <h1 class="title">
-                Hello World
-            </h1>
-            <p class="subtitle">My first website with <strong>Bulma</strong>!</p>
+            <p class="subtitle">{{ questions }}</p>
         </div>
     </section>
 </template>
+
+<script>
+import useQuestions from '../composables/useQuestions';
+export default {
+    setup() {
+        const { fetchQuestions, questions, error } = useQuestions();
+        fetchQuestions();
+        return {
+            questions,
+        };
+    },
+};
+</script>
+
+<style></style>

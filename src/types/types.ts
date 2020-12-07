@@ -18,13 +18,13 @@ export interface Question {
     question: string;
     correctAnswer: string;
     incorrectAnswers: string[];
-    UserAnswer: UserAnswer;
+    userAnswer: UserAnswer | null;
 }
 
 export interface AlienQuestion {
     category: string;
     type: string;
-    difficulty: string;
+    difficulty: QuestionDifficulty;
     question: string;
     correct_answer: string;
     incorrect_answers: string[];
@@ -61,12 +61,12 @@ export interface UseGame {
 }
 
 export interface UseQuestionsState {
-    questions: AlienQuestion[];
+    questions: Question[];
     error: string;
 }
 
 export interface UseQuestions {
-    questions: ComputedRef<AlienQuestion[]>;
+    questions: ComputedRef<Question[]>;
     error: ComputedRef<string>;
     fetchQuestions: () => void;
 }

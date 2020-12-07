@@ -1,4 +1,5 @@
-import { AlienQuestion, UseQuestions, UseQuestionsState } from '@/types/types';
+import { AlienQuestion, Question, UseQuestions, UseQuestionsState } from '@/types/types';
+import { normalizeQuestions } from '@/utils/game';
 import { computed, reactive } from 'vue';
 
 const OPENTDB_URL = 'https://opentdb.com/api.php';
@@ -10,7 +11,7 @@ export default (): UseQuestions => {
     });
 
     // Mutations
-    const setQuestions = (questions: AlienQuestion[]) => {
+    const setQuestions = (questions: Question[]) => {
         state.questions = questions;
     };
     const setError = (error: string) => {
@@ -20,9 +21,9 @@ export default (): UseQuestions => {
     // Actions
     const fetchQuestions = async () => {
         try {
-            const response = await fetch(`${OPENTDB_URL}amount=10`);
-            const questions = await response.json();
-            setQuestions(questions);
+            const response = await fetch(`${OPENTDB_URL}?amount=10`);
+            const { results: questions } = await response.json();
+            setQuestions(normalizeQuestions(questions));
         } catch (e) {
             setError(e);
         }
