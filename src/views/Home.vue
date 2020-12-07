@@ -7,16 +7,7 @@
 </template>
 
 <script>
-import useQuestions from '../composables/useQuestions';
-export default {
-    setup() {
-        const { fetchQuestions, questions, error } = useQuestions();
-        fetchQuestions();
-        return {
-            questions,
-        };
-    },
-};
+export default {};
 </script>
 
 <style></style>

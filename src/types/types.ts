@@ -57,6 +57,7 @@ export interface UseGame {
     startGame: () => void;
     endGame: () => void;
     resetGame: () => void;
+    addQuestions: (questions: Question[]) => void;
     addAnswer: (questionId: string, answer: UserAnswer) => void;
 }
 

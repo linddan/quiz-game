@@ -22,6 +22,7 @@ export default (): UseGame => {
     const resetGame = () => {
         setGameState(GameState.NotStarted);
     };
+    const addQuestions = (questions: Question[]) => setQuestions(questions);
     const addAnswer = (questionId: string, answer: UserAnswer) => {
         setQuestions([]);
         // TBD
@@ -34,6 +35,7 @@ export default (): UseGame => {
         startGame,
         endGame,
         resetGame,
+        addQuestions,
         addAnswer,
     };
 };
