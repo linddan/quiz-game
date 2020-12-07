@@ -1,3 +1,5 @@
+import { ComputedRef } from 'vue';
+
 export enum QuestionDifficulty {
     Easy = 'EASY',
     Medium = 'MEDIUM',
@@ -19,6 +21,15 @@ export interface Question {
     UserAnswer: UserAnswer;
 }
 
+export interface AlienQuestion {
+    category: string;
+    type: string;
+    difficulty: string;
+    question: string;
+    correct_answer: string;
+    incorrect_answers: string[];
+}
+
 export enum LifelineType {
     FiftyFifty = 'FIFTY_FIFTY',
     PlusTen = 'PLUS_TEN',
@@ -35,8 +46,27 @@ export enum GameState {
     Playing = 'PLAYING',
 }
 
-export interface Game {
+export interface UseGameState {
     gameState: GameState;
     questions: Question[];
     lifelines: Lifeline[];
+}
+
+export interface UseGame {
+    questions: ComputedRef<Question[]>;
+    startGame: () => void;
+    endGame: () => void;
+    resetGame: () => void;
+    addAnswer: (questionId: string, answer: UserAnswer) => void;
+}
+
+export interface UseQuestionsState {
+    questions: AlienQuestion[];
+    error: string;
+}
+
+export interface UseQuestions {
+    questions: ComputedRef<AlienQuestion[]>;
+    error: ComputedRef<string>;
+    fetchQuestions: () => void;
 }
