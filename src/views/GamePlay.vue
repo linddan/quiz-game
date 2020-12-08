@@ -1,6 +1,5 @@
 <template>
     <h1 class="is-size-1 has-text-centered">Question #{{ questionIndex + 1 }}</h1>
-    {{ timeleft }}
     <countdown-bar :value="elapsedMilliSeconds" :max="maxMilliSeconds" />
     <transition>
         <question-card
@@ -10,7 +9,7 @@
             @answered="onAnswered"
         />
     </transition>
-    <lifelines />
+    <lifeline-area class="mt-3" :lifelines="lifelines" @lifeline="onLifelineUsed" />
 </template>
 
 <script>
@@ -20,26 +19,23 @@ import { GAME_SUMMARY, router } from '@/router';
 import useGame from '@/composables/useGame';
 import QuestionCard from '../components/QuestionCard.vue';
 import CountdownBar from '@/components/CountdownBar.vue';
-import Lifelines from '@/components/Lifelines.vue';
+import LifelineArea from '@/components/LifelineArea.vue';
 import { getRoundedTime } from '@/utils/game';
 
 export default {
-    components: { QuestionCard, CountdownBar, Lifelines },
+    components: { QuestionCard, CountdownBar, LifelineArea },
     setup() {
-        const { questions, addUserAnswer, endGame } = useGame();
+        const { questions, addUserAnswer, endGame, lifelines, consumeLifeline } = useGame();
         const questionIndex = ref(0);
         const elapsedMilliSeconds = ref(0);
-        const maxMilliSeconds = 15 * 1000;
+        const maxMilliSeconds = ref(15000);
         const currentQuestion = computed(() => questions.value[questionIndex.value]);
-        const advanceToNextQuestion = () => {
-            questionIndex.value++;
-            elapsedMilliSeconds.value = 0;
-        };
 
+        // Advance question or end game
         const proceed = () => {
-            // Check if we should advance to next question or if all have been answered
             if (questionIndex.value + 1 < questions.value.length) {
-                advanceToNextQuestion();
+                questionIndex.value++;
+                elapsedMilliSeconds.value = 0;
             } else {
                 endGame();
                 router.push({ name: GAME_SUMMARY });
@@ -47,7 +43,7 @@ export default {
         };
 
         const timer = setInterval(() => {
-            if (elapsedMilliSeconds.value < maxMilliSeconds) {
+            if (elapsedMilliSeconds.value < maxMilliSeconds.value) {
                 elapsedMilliSeconds.value += 100;
             } else {
                 proceed();
@@ -69,6 +65,18 @@ export default {
             });
             proceed();
         };
+        const onLifelineUsed = (lifeline) => {
+            if (lifeline.type === 'FIFTY_FIFTY') {
+                currentQuestion.value.incorrectAnswers = currentQuestion.value.incorrectAnswers.slice(
+                    2
+                );
+            } else if (lifeline.type === 'PLUS_TEN') {
+                // TODO: Handle max correctly
+                elapsedMilliSeconds.value -= 10000;
+                maxMilliSeconds.value += 10000;
+            }
+            consumeLifeline(lifeline.id);
+        };
 
         // Lifecycle hooks
         onUnmounted(() => {
@@ -79,9 +87,11 @@ export default {
             currentQuestion,
             answers,
             onAnswered,
+            onLifelineUsed,
             questionIndex,
             elapsedMilliSeconds,
             maxMilliSeconds,
+            lifelines,
         };
     },
 };

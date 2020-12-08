@@ -37,8 +37,10 @@ export enum LifelineType {
 }
 
 export interface Lifeline {
+    id: string;
     type: LifelineType;
     isUsed: boolean;
+    name: string;
 }
 
 export enum GameState {
@@ -57,12 +59,14 @@ export interface UseGameState {
 export interface UseGame {
     questions: ComputedRef<Question[]>;
     userAnswers: ComputedRef<UserAnswer[]>;
+    lifelines: ComputedRef<Lifeline[]>;
     currentQuestion: ComputedRef<Question | null>;
     isGamePlaying: ComputedRef<boolean>;
     isGameFinished: ComputedRef<boolean>;
     startGame: () => void;
     endGame: () => void;
     resetGame: () => void;
+    consumeLifeline: (lifelineId: string) => void;
     addQuestions: (questions: Question[]) => void;
     addUserAnswer: (answer: UserAnswer) => void;
 }

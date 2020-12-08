@@ -2,10 +2,19 @@ import { unescape } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { Lifeline, LifelineType, AlienQuestion, Question } from '@/types/types';
 
-export const createNewLifelines = (): Lifeline[] => [
-    { type: LifelineType.FiftyFifty, isUsed: false },
-    { type: LifelineType.PlusTen, isUsed: false },
-];
+export const createFiftyFiftyLifeline = (): Lifeline => ({
+    id: uuid(),
+    type: LifelineType.FiftyFifty,
+    isUsed: false,
+    name: '50/50',
+});
+
+export const createPlusTenLifeline = (): Lifeline => ({
+    id: uuid(),
+    type: LifelineType.PlusTen,
+    isUsed: false,
+    name: '+10',
+});
 
 export const isQuestionUnanswered = ({ userAnswer }: Question) => userAnswer === null;
 
