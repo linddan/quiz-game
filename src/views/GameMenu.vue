@@ -13,7 +13,7 @@
 <script>
 import useQuestions from '../composables/useQuestions';
 import useGame from '../composables/useGame';
-import router from '@/router';
+import { router } from '@/router';
 export default {
     setup() {
         const onClick = async () => {
@@ -21,7 +21,7 @@ export default {
             const { startGame, addQuestions } = useGame();
             //TODO: Handle error situation, loading state
             await fetchQuestions();
-            addQuestions(fetchedQuestions);
+            addQuestions(fetchedQuestions.value);
             startGame();
             router.push({ name: 'GamePlay' });
         };

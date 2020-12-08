@@ -7,6 +7,7 @@ export enum QuestionDifficulty {
 }
 
 export interface UserAnswer {
+    questionId: string;
     time: number;
     isCorrect: boolean;
 }
@@ -49,19 +50,21 @@ export enum GameState {
 export interface UseGameState {
     gameState: GameState;
     questions: Question[];
+    userAnswers: UserAnswer[];
     lifelines: Lifeline[];
 }
 
 export interface UseGame {
     questions: ComputedRef<Question[]>;
+    userAnswers: ComputedRef<UserAnswer[]>;
     currentQuestion: ComputedRef<Question | null>;
-    isNotGameStarted: ComputedRef<boolean>;
+    isGamePlaying: ComputedRef<boolean>;
     isGameFinished: ComputedRef<boolean>;
     startGame: () => void;
     endGame: () => void;
     resetGame: () => void;
     addQuestions: (questions: Question[]) => void;
-    addUserAnswer: (questionId: string, answer: UserAnswer) => void;
+    addUserAnswer: (answer: UserAnswer) => void;
 }
 
 export interface UseQuestionsState {

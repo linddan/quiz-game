@@ -1,45 +1,35 @@
 <template>
-    <h1 class="is-size-1 has-text-centered">Question #{{ questionIndex }}</h1>
+    <h1 class="is-size-1 has-text-centered">Question #{{ questionIndex + 1 }}</h1>
     <time-bar />
-    <question-card
-        v-if="currentQuestion"
-        :question="currentQuestion.question"
-        :answers="answers"
-        @answered="onAnswered"
-    />
+    <transition>
+        <question-card
+            v-if="currentQuestion"
+            :question="currentQuestion.question"
+            :answers="answers"
+            @answered="onAnswered"
+        />
+    </transition>
     <lifelines />
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { shuffle } from 'lodash';
-import router from '@/router';
+import { router } from '@/router';
 import useGame from '@/composables/useGame';
 import QuestionCard from '../components/QuestionCard.vue';
 import TimeBar from '@/components/TimeBar.vue';
 import Lifelines from '@/components/Lifelines.vue';
-import { getNoOfUnansweredQuestions } from '@/utils/game';
 
 export default {
     components: { QuestionCard, TimeBar, Lifelines },
     setup() {
-        const {
-            isNotGameStarted,
-            isGameFinished,
-            currentQuestion,
-            questions,
-            addUserAnswer,
-        } = useGame();
+        const { questions, addUserAnswer, endGame } = useGame();
+        const questionIndex = ref(0);
+        const currentQuestion = computed(() => questions.value[questionIndex.value]);
 
-        // Handle case where user is not in playing state
-        // (e.g. navigates directly to the routes)
-        if (isNotGameStarted.value) {
-            router.push({ name: 'GameMenu' });
-        } else if (isGameFinished.value) {
-            router.push({ name: 'GameSummary' });
-        }
+        const advanceToNextQuestion = () => questionIndex.value++;
 
-        // TODO: Shuffle answers
         const answers = computed(() =>
             shuffle([
                 currentQuestion.value.correctAnswer,
@@ -47,13 +37,20 @@ export default {
             ])
         );
 
-        const questionIndex = computed(
-            () => questions.value.length - getNoOfUnansweredQuestions(questions.value) + 1
-        );
+        const onAnswered = (userChoice) => {
+            addUserAnswer({
+                questionId: currentQuestion.value.id,
+                isCorrect: currentQuestion.value.correctAnswer === userChoice,
+                time: 0,
+            });
 
-        const onAnswered = (userAnswer) => {
-            addUserAnswer(userAnswer);
-            console.log(userAnswer);
+            if (questionIndex.value + 1 < questions.value.length) {
+                advanceToNextQuestion();
+            } else {
+                // All questions answered
+                endGame();
+                router.push({ name: 'GameSummary' });
+            }
         };
 
         return {
@@ -66,4 +63,18 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-enter-active {
+    transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
+}
+</style>
