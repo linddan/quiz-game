@@ -1,6 +1,7 @@
 <template>
     <h1 class="is-size-1 has-text-centered">Question #{{ questionIndex + 1 }}</h1>
-    <time-bar />
+    {{ timeleft }}
+    <countdown-bar :value="elapsedMilliSeconds" :max="maxMilliSeconds" />
     <transition>
         <question-card
             v-if="currentQuestion"
@@ -13,22 +14,45 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, onUnmounted, ref } from 'vue';
 import { shuffle } from 'lodash';
-import { router } from '@/router';
+import { GAME_SUMMARY, router } from '@/router';
 import useGame from '@/composables/useGame';
 import QuestionCard from '../components/QuestionCard.vue';
-import TimeBar from '@/components/TimeBar.vue';
+import CountdownBar from '@/components/CountdownBar.vue';
 import Lifelines from '@/components/Lifelines.vue';
+import { getRoundedTime } from '@/utils/game';
 
 export default {
-    components: { QuestionCard, TimeBar, Lifelines },
+    components: { QuestionCard, CountdownBar, Lifelines },
     setup() {
         const { questions, addUserAnswer, endGame } = useGame();
         const questionIndex = ref(0);
+        const elapsedMilliSeconds = ref(0);
+        const maxMilliSeconds = 15 * 1000;
         const currentQuestion = computed(() => questions.value[questionIndex.value]);
+        const advanceToNextQuestion = () => {
+            questionIndex.value++;
+            elapsedMilliSeconds.value = 0;
+        };
 
-        const advanceToNextQuestion = () => questionIndex.value++;
+        const proceed = () => {
+            // Check if we should advance to next question or if all have been answered
+            if (questionIndex.value + 1 < questions.value.length) {
+                advanceToNextQuestion();
+            } else {
+                endGame();
+                router.push({ name: GAME_SUMMARY });
+            }
+        };
+
+        const timer = setInterval(() => {
+            if (elapsedMilliSeconds.value < maxMilliSeconds) {
+                elapsedMilliSeconds.value += 100;
+            } else {
+                proceed();
+            }
+        }, 100);
 
         const answers = computed(() =>
             shuffle([
@@ -41,23 +65,23 @@ export default {
             addUserAnswer({
                 questionId: currentQuestion.value.id,
                 isCorrect: currentQuestion.value.correctAnswer === userChoice,
-                time: 0,
+                time: getRoundedTime(elapsedMilliSeconds.value / 1000),
             });
-
-            if (questionIndex.value + 1 < questions.value.length) {
-                advanceToNextQuestion();
-            } else {
-                // All questions answered
-                endGame();
-                router.push({ name: 'GameSummary' });
-            }
+            proceed();
         };
+
+        // Lifecycle hooks
+        onUnmounted(() => {
+            clearInterval(timer);
+        });
 
         return {
             currentQuestion,
             answers,
             onAnswered,
             questionIndex,
+            elapsedMilliSeconds,
+            maxMilliSeconds,
         };
     },
 };

@@ -15,6 +15,8 @@ export const getNextUnansweredQuestion = (questions: Question[]) =>
 export const getNoOfUnansweredQuestions = (questions: Question[]) =>
     questions.filter(isQuestionUnanswered).length;
 
+export const getRoundedTime = (time: number) => Math.round(time * 10) / 10;
+
 export const normalizeQuestions = (alienQuestions: AlienQuestion[]): Question[] =>
     alienQuestions.map(
         (alienQuestion: AlienQuestion): Question => {

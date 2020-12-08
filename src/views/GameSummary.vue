@@ -5,10 +5,10 @@
                 <h1 class="is-size-1 has-text-centered">Game Summary</h1>
                 <p class="has-text-centered">{{ userAnswers }}</p>
             </div>
-            <a class="button is-primary" @click="onClick">
-                Restart
-            </a>
         </div>
+        <a class="button is-primary" @click="onClick">
+            Restart
+        </a>
     </section>
 </template>
 
