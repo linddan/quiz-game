@@ -21,7 +21,7 @@ export default (): UseQuestions => {
     // Actions
     const fetchQuestions = async () => {
         try {
-            const response = await fetch(`${OPENTDB_URL}?amount=10`);
+            const response = await fetch(`${OPENTDB_URL}?amount=10&type=multiple`);
             const { results: questions } = await response.json();
             setQuestions(normalizeQuestions(questions));
         } catch (e) {

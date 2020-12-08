@@ -54,6 +54,9 @@ export interface UseGameState {
 
 export interface UseGame {
     questions: ComputedRef<Question[]>;
+    nextQuestion: ComputedRef<Question | null>;
+    isNotGameStarted: ComputedRef<boolean>;
+    isGameFinished: ComputedRef<boolean>;
     startGame: () => void;
     endGame: () => void;
     resetGame: () => void;

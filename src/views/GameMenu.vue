@@ -1,19 +1,13 @@
 <template>
-    <section>
-        <div class="container columns is-vcentered">
-            <div class="column is-8 is-offset-2">
-                <h1 class="is-size-1 has-text-centered">New Game</h1>
-                <p class="has-text-centered">This is where the player gets to configure the game</p>
-                <div class="field is-grouped is-grouped-centered mt-6">
-                    <p class="control">
-                        <a class="button is-primary" @click="onClick">
-                            Let's play!
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <h1 class="is-size-1 has-text-centered">New Game</h1>
+    <p class="has-text-centered">This is where the player gets to configure the game</p>
+    <div class="block field is-grouped is-grouped-centered">
+        <p class="control">
+            <a class="button is-primary" @click="onClick">
+                Let's play!
+            </a>
+        </p>
+    </div>
 </template>
 
 <script>
