@@ -12,12 +12,6 @@
             </tr>
             <tr>
                 <td>
-                    <strong>Number of correct answers:</strong>
-                </td>
-                <td>{{ noOfCorrectAnswers }}</td>
-            </tr>
-            <tr>
-                <td>
                     <strong>Number of incorrect answers:</strong>
                 </td>
                 <td>{{ noOfIncorrectAnswers }}</td>
