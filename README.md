@@ -1,4 +1,4 @@
-# Quizzy
+# Quiz Game
 
 ## Requirements
 
