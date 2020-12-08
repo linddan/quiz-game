@@ -22,20 +22,25 @@ import CountdownBar from '@/components/CountdownBar.vue';
 import LifelineArea from '@/components/LifelineArea.vue';
 import { getRoundedTime } from '@/utils/game';
 
+const TIME_LIMIT_SECONDS = 15;
+
 export default {
     components: { QuestionCard, CountdownBar, LifelineArea },
     setup() {
         const { questions, addUserAnswer, endGame, lifelines, consumeLifeline } = useGame();
         const questionIndex = ref(0);
         const elapsedMilliSeconds = ref(0);
-        const maxMilliSeconds = ref(15000);
+        const maxMilliSeconds = ref(TIME_LIMIT_SECONDS * 1000);
         const currentQuestion = computed(() => questions.value[questionIndex.value]);
 
         // Advance question or end game
-        const proceed = () => {
+        const doNextQuestion = () => {
             if (questionIndex.value + 1 < questions.value.length) {
+                // Show next question
                 questionIndex.value++;
+                // Reset time (and max, in case +10s lifeline was used)
                 elapsedMilliSeconds.value = 0;
+                maxMilliSeconds.value = TIME_LIMIT_SECONDS * 1000;
             } else {
                 endGame();
                 router.push({ name: GAME_SUMMARY });
@@ -46,10 +51,12 @@ export default {
             if (elapsedMilliSeconds.value < maxMilliSeconds.value) {
                 elapsedMilliSeconds.value += 100;
             } else {
-                proceed();
+                // Time ran out
+                doNextQuestion();
             }
         }, 100);
 
+        // Compile the answers and shuffle them
         const answers = computed(() =>
             shuffle([
                 currentQuestion.value.correctAnswer,
@@ -57,14 +64,17 @@ export default {
             ])
         );
 
+        // User clicked on an answer
         const onAnswered = (userChoice) => {
             addUserAnswer({
                 questionId: currentQuestion.value.id,
                 isCorrect: currentQuestion.value.correctAnswer === userChoice,
                 time: getRoundedTime(elapsedMilliSeconds.value / 1000),
             });
-            proceed();
+            doNextQuestion();
         };
+
+        // Lifeline was used
         const onLifelineUsed = (lifeline) => {
             if (lifeline.type === 'FIFTY_FIFTY') {
                 currentQuestion.value.incorrectAnswers = currentQuestion.value.incorrectAnswers.slice(
@@ -75,10 +85,10 @@ export default {
                 elapsedMilliSeconds.value -= 10000;
                 maxMilliSeconds.value += 10000;
             }
+            // TODO: We don't need to use an id. Just type.
             consumeLifeline(lifeline.id);
         };
 
-        // Lifecycle hooks
         onUnmounted(() => {
             clearInterval(timer);
         });
