@@ -1,5 +1,6 @@
-import { Lifeline, LifelineType, AlienQuestion, Question } from '@/types/types';
+import { unescape } from 'lodash';
 import { v4 as uuid } from 'uuid';
+import { Lifeline, LifelineType, AlienQuestion, Question } from '@/types/types';
 
 export const createNewLifelines = (): Lifeline[] => [
     { type: LifelineType.FiftyFifty, isUsed: false },
@@ -29,7 +30,7 @@ export const normalizeQuestions = (alienQuestions: AlienQuestion[]): Question[] 
                 id: uuid(),
                 category,
                 difficulty,
-                question,
+                question: unescape(question),
                 correctAnswer,
                 incorrectAnswers,
                 userAnswer: null,

@@ -18,26 +18,26 @@ export default (): UseGame => {
     const endGame = () => setGameState(GameState.Finished);
     const resetGame = () => setGameState(GameState.NotStarted);
     const addQuestions = (questions: Question[]) => setQuestions(questions);
-    const addAnswer = (questionId: string, answer: UserAnswer) => {
+    const addUserAnswer = (questionId: string, answer: UserAnswer) => {
         setQuestions([]);
         // TBD
     };
 
     // Getters
     const questions = computed(() => state.questions);
-    const nextQuestion = computed(() => getNextUnansweredQuestion(state.questions));
+    const currentQuestion = computed(() => getNextUnansweredQuestion(state.questions));
     const isNotGameStarted = computed(() => state.gameState === GameState.NotStarted);
     const isGameFinished = computed(() => state.gameState === GameState.Finished);
 
     return {
         questions,
-        nextQuestion,
+        currentQuestion,
         isNotGameStarted,
         isGameFinished,
         startGame,
         endGame,
         resetGame,
         addQuestions,
-        addAnswer,
+        addUserAnswer,
     };
 };
