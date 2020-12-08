@@ -81,3 +81,12 @@ export interface UseQuestions {
     error: ComputedRef<string>;
     fetchQuestions: () => void;
 }
+
+export interface Statistics {
+    noOfCorrectAnswers: number;
+    noOfIncorrectAnswers: number;
+    noOfUnansweredQuestions: number;
+    averageTimePerQuestion: number;
+    quickestAnswer: number;
+    slowestAnswer: number;
+}
