@@ -1,13 +1,13 @@
 <template>
     <h1 class="is-size-1 has-text-centered">New Game</h1>
     <p class="has-text-centered">This is where the player gets to configure the game</p>
-    <div class="block field is-grouped is-grouped-centered">
-        <p class="control">
-            <a class="button is-primary" @click="onClick">
-                Let's play!
-            </a>
-        </p>
-    </div>
+
+    <button class="button is-large" @click="onClick">
+        <span class="icon is-medium">
+            <i class="fas fa-angle-double-right"></i>
+        </span>
+        <span>Let's play</span>
+    </button>
 </template>
 
 <script>
