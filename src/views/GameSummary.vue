@@ -1,48 +1,69 @@
 <template>
-    <h1 class="is-size-1 has-text-centered">Game Summary</h1>
-    <p class="has-text-centered">Here's some information about your game!</p>
+    <h1 class="is-size-1 has-text-weight-bold has-text-centered">Game Summary</h1>
+    <p class="subtitle has-text-centered">{{ message }}</p>
 
     <div class="box mt-5">
-        <ul>
-            <li>
-                Number of correct answers:
-                <span>{{ noOfCorrectAnswers }}</span>
-            </li>
-            <li>
-                Number of incorrect answers:
-                <span>{{ noOfIncorrectAnswers }}</span>
-            </li>
-            <li>
-                Number of unanswered questions:
-                <span>{{ noOfUnansweredQuestions }}</span>
-            </li>
-            <li v-if="shouldDisplayStat(averageTimePerQuestion)">
-                Average time per question:
-                <span>{{ averageTimePerQuestion }} seconds</span>
-            </li>
-            <li v-if="shouldDisplayStat(quickestAnswer)">
-                Quickest answer:
-                <span>{{ quickestAnswer }} seconds</span>
-            </li>
-            <li v-if="shouldDisplayStat(slowestAnswer)">
-                Slowest answer:
-                <span>{{ slowestAnswer }} seconds</span>
-            </li>
-        </ul>
+        <table class="table is-bordered is-fullwidth is-striped">
+            <tr>
+                <td>
+                    <strong>Number of correct answers:</strong>
+                </td>
+                <td>{{ noOfCorrectAnswers }}</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Number of correct answers:</strong>
+                </td>
+                <td>{{ noOfCorrectAnswers }}</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Number of incorrect answers:</strong>
+                </td>
+                <td>{{ noOfIncorrectAnswers }}</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Number of unanswered questions:</strong>
+                </td>
+                <td>{{ noOfUnansweredQuestions }}</td>
+            </tr>
+            <tr>
+                <td v-if="shouldDisplayStat(averageTimePerQuestion)">
+                    <strong>Average time per question:</strong>
+                </td>
+                <td>{{ averageTimePerQuestion }} seconds</td>
+            </tr>
+            <tr>
+                <td v-if="shouldDisplayStat(quickestAnswer)">
+                    <strong>Quickest answer:</strong>
+                </td>
+                <td>{{ quickestAnswer }} seconds</td>
+            </tr>
+            <tr>
+                <td v-if="shouldDisplayStat(slowestAnswer)">
+                    <strong>Slowest answer:</strong>
+                </td>
+                <td>{{ slowestAnswer }} seconds</td>
+            </tr>
+        </table>
     </div>
 
-    <button class="button is-large" @click="onClick">
-        <span class="icon is-medium">
-            <i class="fas fa-angle-double-right"></i>
-        </span>
-        <span>Play again</span>
-    </button>
+    <div class="container has-text-centered">
+        <button class="button is-large" @click="onClick">
+            <span class="icon is-medium">
+                <i class="fas fa-angle-double-right"></i>
+            </span>
+            <span>Play again</span>
+        </button>
+    </div>
 </template>
 
 <script>
 import useGame from '@/composables/useGame';
 import { router, GAME_MENU } from '@/router';
 import { getStatistics } from '@/utils/game';
+import { computed } from 'vue';
 export default {
     setup() {
         const { userAnswers, resetGame, questions } = useGame();
@@ -62,8 +83,16 @@ export default {
             slowestAnswer,
         } = getStatistics(userAnswers.value, questions.value);
 
+        const message = computed(() => {
+            const negResult = noOfIncorrectAnswers + noOfUnansweredQuestions;
+            return negResult === 0
+                ? 'Wow, you aced all the questions!'
+                : 'Not bad. Try again and see if you can get them all!';
+        });
+
         return {
             userAnswers,
+            message,
             onClick,
             shouldDisplayStat,
             noOfCorrectAnswers,

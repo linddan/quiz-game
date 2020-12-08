@@ -1,5 +1,7 @@
 <template>
-    <h1 class="is-size-1 has-text-centered">Question #{{ questionIndex + 1 }}</h1>
+    <h1 class="is-size-1 has-text-weight-bold has-text-centered">
+        Question #{{ questionIndex + 1 }}
+    </h1>
     <countdown-bar :value="elapsedMilliSeconds" :max="maxMilliSeconds" />
     <transition>
         <question-card

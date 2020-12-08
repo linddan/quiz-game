@@ -1,20 +1,22 @@
 <template>
     <div class="card">
         <div class="card-content">
-            <p class="title">
+            <p class="is-size-3">
                 {{ question }}
             </p>
-            <a
-                v-for="(answer, index) in answers"
-                :key="index"
-                class="panel-block"
-                @click="onClick(answer)"
-            >
-                <span class="panel-icon">
-                    <i class="fas fa-arrow-alt-circle-right" aria-hidden="true"></i>
-                </span>
-                {{ answer }}
-            </a>
+            <div class="mt-4">
+                <a
+                    v-for="(answer, index) in answers"
+                    :key="index"
+                    class="panel-block"
+                    @click="onClick(answer)"
+                >
+                    <span class="panel-icon">
+                        <i class="fas fa-arrow-alt-circle-right" aria-hidden="true"></i>
+                    </span>
+                    {{ answer }}
+                </a>
+            </div>
         </div>
     </div>
 </template>

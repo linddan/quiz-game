@@ -1,7 +1,8 @@
 <template>
-    <h1 class="is-size-1 has-text-centered">New Game</h1>
-    <p class="has-text-centered">This is where the player gets to configure the game</p>
-    <div class="box  mt-5">
+    <h1 class="is-size-1 has-text-centered has-text-weight-bold	">Quiz Game</h1>
+    <p class="subtitle has-text-centered">This is where the player gets to configure the game</p>
+    <div class="box mt-5"></div>
+    <div class="container has-text-centered">
         <button class="button is-large" @click="onClick">
             <span class="icon is-medium">
                 <i class="fas fa-angle-double-right"></i>
