@@ -71,8 +71,8 @@ describe('normalizeQuestions', () => {
         ];
         const normalizedQuestions = normalizeQuestions(alienQuestions);
         expect(normalizedQuestions[0]).toHaveProperty('id');
-        const { id, ...restProps } = normalizedQuestions[0];
-        expect(restProps).toMatchObject({
+        delete normalizedQuestions[0].id;
+        expect(normalizedQuestions[0]).toMatchObject({
             category: 'Entertainment: Film',
             correctAnswer: 'Chicago',
             difficulty: 'medium',
