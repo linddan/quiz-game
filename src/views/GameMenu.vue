@@ -1,6 +1,6 @@
 <template>
     <h1 class="is-size-1 has-text-centered has-text-weight-bold	">Quiz Game</h1>
-    <p class="subtitle has-text-centered">This is where the player gets to configure the game</p>
+    <p class="subtitle has-text-centered">A trivia game</p>
     <div class="box mt-5"></div>
     <div class="container has-text-centered">
         <button class="button is-large" @click="onClick">
