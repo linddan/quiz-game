@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+import { sortBy } from 'lodash';
 import {
     Lifeline,
     LifelineType,
@@ -7,8 +8,8 @@ import {
     UserAnswer,
     Category,
 } from '@/types/types';
-import { sortBy } from 'lodash';
 
+// Creates a new 50/50 lifeline
 export const createFiftyFiftyLifeline = (): Lifeline => ({
     id: uuid(),
     type: LifelineType.FiftyFifty,
@@ -16,6 +17,7 @@ export const createFiftyFiftyLifeline = (): Lifeline => ({
     name: '50/50',
 });
 
+// Creates a new +10s lifeline
 export const createPlusTenLifeline = (): Lifeline => ({
     id: uuid(),
     type: LifelineType.PlusTen,
@@ -23,15 +25,17 @@ export const createPlusTenLifeline = (): Lifeline => ({
     name: '+10s',
 });
 
+// Helper functions
 export const isFiftyFiftyLifeline = ({ type }: Lifeline) => type === LifelineType.FiftyFifty;
 export const isPlusTenLifeline = ({ type }: Lifeline) => type === LifelineType.PlusTen;
-
-export const getRoundedTime = (time: number) => Math.round(time * 10) / 10;
-
 const isCorrectAnswer = ({ isCorrect }: UserAnswer) => isCorrect === true;
 const isIncorrectAnswer = ({ isCorrect }: UserAnswer) => isCorrect === false;
 const pickTime = ({ time }: UserAnswer) => time;
 
+// Rounds time to 1 decimal
+export const getRoundedTime = (time: number) => Math.round(time * 10) / 10;
+
+// Produces statistics of the finished game
 export const getStatistics = (userAnswers: UserAnswer[], noOfQuestions: number) => {
     const allTimes = userAnswers.map(pickTime);
     const noOfCorrectAnswers = userAnswers.filter(isCorrectAnswer).length;
@@ -54,6 +58,7 @@ export const getStatistics = (userAnswers: UserAnswer[], noOfQuestions: number) 
     };
 };
 
+// Unescapes a string (needed as API returns encoded strings)
 export const unescape = (string: string) => {
     const parsedString = new DOMParser().parseFromString(string, 'text/html').querySelector('html');
     if (parsedString === null) {
@@ -65,6 +70,7 @@ export const unescape = (string: string) => {
     return parsedString.textContent;
 };
 
+// Convert API question object structure
 export const normalizeQuestions = (alienQuestions: AlienQuestion[]): Question[] =>
     alienQuestions.map(
         (alienQuestion: AlienQuestion): Question => {
@@ -86,6 +92,8 @@ export const normalizeQuestions = (alienQuestions: AlienQuestion[]): Question[] 
             };
         }
     );
+
+// Convert API category object structure
 export const normalizeCategories = (alienCategories: Category[]): Category[] => {
     const categories = alienCategories.map(
         (alienCategory: Category): Category => {
@@ -98,6 +106,8 @@ export const normalizeCategories = (alienCategories: Category[]): Category[] => 
         }
     );
     const sortedCategories = sortBy(categories, 'name');
+
+    // We want an "all" option
     sortedCategories.unshift({ id: -1, name: 'All' });
     return sortedCategories;
 };

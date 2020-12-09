@@ -76,7 +76,6 @@ describe('Lifelines', () => {
             .its('length')
             .should('be', 4)
             .get('[data-cy=timeLeft]')
-            // TODO: Better check countdown as this is prone to timing issues
             .contains(25);
     });
 });

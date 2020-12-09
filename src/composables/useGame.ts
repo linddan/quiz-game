@@ -10,27 +10,41 @@ const state: UseGameState = reactive({
     lifelines: [],
 });
 
+/*
+ * * Composable serving as store for game-related functionality. Uses global state.
+ */
 export default (): UseGame => {
+    //
     // Mutations
+    //
     const setGameState = (gameState: GameState) => (state.gameState = gameState);
     const setQuestions = (questions: Question[]) => (state.questions = questions);
     const setUserAnswers = (userAnswers: UserAnswer[]) => (state.userAnswers = userAnswers);
     const setLifelines = (lifelines: Lifeline[]) => (state.lifelines = orderBy(lifelines, 'type'));
+
+    //
     // Actions
+    //
+    // Starts the game
     const startGame = () => {
         setGameState(GameState.Playing);
         setLifelines([createFiftyFiftyLifeline(), createPlusTenLifeline()]);
     };
+    // Ends the game
     const endGame = () => setGameState(GameState.Finished);
+    // Resets the game
     const resetGame = () => {
         setGameState(GameState.NotStarted);
         setQuestions([]);
         setUserAnswers([]);
         setLifelines([]);
     };
+    // Add a list of questions to be answered
     const addQuestions = (questions: Question[]) =>
         setQuestions([...questions, ...state.questions]);
+    // Add a user answer for specific question
     const addUserAnswer = (answer: UserAnswer) => setUserAnswers([answer, ...state.userAnswers]);
+    // Handles when user uses a lifeline
     const consumeLifeline = (lifelineId: string) => {
         const lifeline = state.lifelines.find((lifeline) => lifelineId === lifeline.id);
         if (lifeline) {
@@ -40,7 +54,9 @@ export default (): UseGame => {
         }
     };
 
+    //
     // Getters
+    //
     const questions = computed(() => state.questions);
     const userAnswers = computed(() => state.userAnswers);
     const lifelines = computed(() => state.lifelines);

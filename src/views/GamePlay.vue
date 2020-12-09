@@ -66,6 +66,7 @@ export default {
             addUserAnswer({
                 questionId: currentQuestion.value.id,
                 isCorrect: currentQuestion.value.correctAnswer === userChoice,
+                // TODO: Round the time when presenting instead
                 time: getRoundedTime(timerElapsedMilliSeconds.value / ONE_S_IN_MS),
             });
             doNextQuestion();

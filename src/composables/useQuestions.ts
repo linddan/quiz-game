@@ -5,6 +5,9 @@ import { computed, reactive } from 'vue';
 const OPENTDB_URL = 'https://opentdb.com/api.php';
 const OPENTDB_CATEGORIES_URL = 'https://opentdb.com/api_category.php';
 
+/*
+ * Composable serving as store and providing questions fetched from an API. Uses local state.
+ */
 export default (): UseQuestions => {
     const state: UseQuestionsState = reactive({
         error: '',
@@ -12,12 +15,17 @@ export default (): UseQuestions => {
         categories: [],
     });
 
+    //
     // Mutations
+    //
     const setQuestions = (questions: Question[]) => (state.questions = questions);
     const setCategories = (categories: Category[]) => (state.categories = categories);
     const setError = (error: string) => (state.error = error);
 
+    //
     // Actions
+    //
+    // Fetches the questions from the API.
     const fetchQuestions = async (categoryId: number) => {
         let fetchQuestionsURL = `${OPENTDB_URL}?amount=10&type=multiple`;
         try {
@@ -32,6 +40,8 @@ export default (): UseQuestions => {
             setError(e);
         }
     };
+
+    // Fetches the category list from the API.
     const fetchCategories = async () => {
         try {
             const response = await fetch(`${OPENTDB_CATEGORIES_URL}`);
@@ -41,10 +51,18 @@ export default (): UseQuestions => {
             setError(e);
         }
     };
+
+    //
+    // Getters
+    //
+    const questions = computed(() => state.questions);
+    const categories = computed(() => state.categories);
+    const error = computed(() => state.error);
+
     return {
-        questions: computed(() => state.questions),
-        categories: computed(() => state.categories),
-        error: computed(() => state.error),
+        questions,
+        categories,
+        error,
         fetchQuestions,
         fetchCategories,
     };
