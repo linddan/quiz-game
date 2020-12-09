@@ -38,10 +38,6 @@ export default (): UseGame => {
             const restLifelines = state.lifelines.filter((lifeline) => lifelineId !== lifeline.id);
             setLifelines([updatedLifeline, ...restLifelines]);
         }
-
-        if (lifeline) {
-            lifeline.isUsed = true;
-        }
     };
 
     // Getters
