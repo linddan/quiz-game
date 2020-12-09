@@ -1,7 +1,7 @@
 <template>
     <div class="is-flex is-flex-wrap-nowrap	is-flex-direction-row is-align-items-baseline">
         <progress class="is-small progress" :value="max - elapsed" :max="max" />
-        <div class="title has-text-centered timeLeft">{{ timeLeft }}</div>
+        <div class="title has-text-centered timeLeft" data-cy="timeLeft">{{ timeLeft }}</div>
     </div>
 </template>
 

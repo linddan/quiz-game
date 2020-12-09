@@ -4,27 +4,27 @@
 
     <div class="box mt-5">
         <table class="table is-bordered is-fullwidth is-striped">
-            <tr>
+            <tr data-cy="summaryRow">
                 <td><strong>Number of correct answers:</strong></td>
                 <td>{{ noOfCorrectAnswers }}</td>
             </tr>
-            <tr>
+            <tr data-cy="summaryRow">
                 <td><strong>Number of incorrect answers:</strong></td>
                 <td>{{ noOfIncorrectAnswers }}</td>
             </tr>
-            <tr>
+            <tr data-cy="summaryRow">
                 <td><strong>Number of unanswered questions:</strong></td>
                 <td>{{ noOfUnansweredQuestions }}</td>
             </tr>
-            <tr v-if="shouldDisplayStat(averageTimePerQuestion)">
+            <tr data-cy="summaryRow" v-if="shouldDisplayStat(averageTimePerQuestion)">
                 <td><strong>Average time per question:</strong></td>
                 <td>{{ averageTimePerQuestion }} seconds</td>
             </tr>
-            <tr v-if="shouldDisplayStat(quickestAnswer)">
+            <tr data-cy="summaryRow" v-if="shouldDisplayStat(quickestAnswer)">
                 <td><strong>Quickest answer:</strong></td>
                 <td>{{ quickestAnswer }} seconds</td>
             </tr>
-            <tr v-if="shouldDisplayStat(slowestAnswer)">
+            <tr data-cy="summaryRow" v-if="shouldDisplayStat(slowestAnswer)">
                 <td><strong>Slowest answer:</strong></td>
                 <td>{{ slowestAnswer }} seconds</td>
             </tr>
@@ -32,7 +32,7 @@
     </div>
 
     <div class="container has-text-centered">
-        <button class="button is-large" @click="onClick">
+        <button class="button is-large" @click="onClick" data-cy="playAgain">
             <span class="icon is-medium">
                 <i class="fas fa-angle-double-right"></i>
             </span>

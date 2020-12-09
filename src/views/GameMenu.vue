@@ -15,6 +15,7 @@
                 v-for="category in categories"
                 :key="category.id"
                 @click="onClickCategory(category.id)"
+                data-cy="category"
             >
                 <p v-if="category.isSelected" class="is-size-7 has-text-info has-text-weight-bold">
                     {{ category.name }}
@@ -27,7 +28,7 @@
     </div>
 
     <div class="container has-text-centered">
-        <button class="button is-large" @click="onClickPlay">
+        <button class="button is-large" @click="onClickPlay" data-cy="startButton">
             <span class="icon is-medium">
                 <i class="fas fa-angle-double-right"></i>
             </span>

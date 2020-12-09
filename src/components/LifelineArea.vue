@@ -11,6 +11,7 @@
                 }"
                 :key="index"
                 @click="onClick(lifeline)"
+                data-cy="lifeline"
             >
                 <span class="subtitle has-text-weight-bold">{{ lifeline.name }}</span>
             </a>
