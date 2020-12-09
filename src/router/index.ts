@@ -1,25 +1,48 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Home from '../views/Home.vue';
+import useGame from '../composables/useGame';
+import GameMenu from '../views/GameMenu.vue';
+import GamePlay from '../views/GamePlay.vue';
+import GameSummary from '../views/GameSummary.vue';
+
+export const GAME_MENU = 'GameMenu';
+export const GAME_PLAY = 'GamePlay';
+export const GAME_SUMMARY = 'GameSummary';
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        name: 'Home',
-        component: Home,
+        name: GAME_MENU,
+        component: GameMenu,
     },
     {
-        path: '/about',
-        name: 'About',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+        path: '/play',
+        name: GAME_PLAY,
+        component: GamePlay,
+    },
+    {
+        path: '/summary',
+        name: GAME_SUMMARY,
+        component: GameSummary,
     },
 ];
 
-const router = createRouter({
+export const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
 });
 
-export default router;
+// Navigation guard
+router.beforeEach((to, _, next) => {
+    const { isGameFinished, isGamePlaying } = useGame();
+    const correctRouteName = isGamePlaying.value
+        ? GAME_PLAY
+        : isGameFinished.value
+        ? GAME_SUMMARY
+        : GAME_MENU;
+
+    if (to.name !== correctRouteName) {
+        next({ name: correctRouteName });
+    } else {
+        next();
+    }
+});

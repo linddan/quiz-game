@@ -1,7 +1,16 @@
 <template>
-    <div id="nav">
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <section>
+        <div class="columns">
+            <div class="column is-6 is-offset-3 mt-4">
+                <Suspense>
+                    <template #default>
+                        <router-view />
+                    </template>
+                    <template #fallback>
+                        <div>Loading...</div>
+                    </template>
+                </Suspense>
+            </div>
+        </div>
+    </section>
 </template>
