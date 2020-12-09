@@ -1,5 +1,13 @@
 import { v4 as uuid } from 'uuid';
-import { Lifeline, LifelineType, AlienQuestion, Question, UserAnswer } from '@/types/types';
+import {
+    Lifeline,
+    LifelineType,
+    AlienQuestion,
+    Question,
+    UserAnswer,
+    Category,
+} from '@/types/types';
+import { sortBy } from 'lodash';
 
 export const createFiftyFiftyLifeline = (): Lifeline => ({
     id: uuid(),
@@ -87,3 +95,18 @@ export const normalizeQuestions = (alienQuestions: AlienQuestion[]): Question[] 
             };
         }
     );
+export const normalizeCategories = (alienCategories: Category[]): Category[] => {
+    const categories = alienCategories.map(
+        (alienCategory: Category): Category => {
+            const { id, name } = alienCategory;
+
+            return {
+                id,
+                name: unescape(name),
+            };
+        }
+    );
+    const sortedCategories = sortBy(categories, 'name');
+    sortedCategories.unshift({ id: -1, name: 'All' });
+    return sortedCategories;
+};

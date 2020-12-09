@@ -12,6 +12,11 @@ export interface UserAnswer {
     isCorrect: boolean;
 }
 
+export interface Category {
+    id: number;
+    name: string;
+}
+
 export interface Question {
     id: string;
     category: string;
@@ -73,13 +78,16 @@ export interface UseGame {
 
 export interface UseQuestionsState {
     questions: Question[];
+    categories: Category[];
     error: string;
 }
 
 export interface UseQuestions {
     questions: ComputedRef<Question[]>;
+    categories: ComputedRef<Category[]>;
     error: ComputedRef<string>;
-    fetchQuestions: () => void;
+    fetchQuestions: (categoryId: number) => void;
+    fetchCategories: () => void;
 }
 
 export interface Statistics {
