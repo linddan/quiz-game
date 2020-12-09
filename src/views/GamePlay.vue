@@ -8,14 +8,12 @@
         @timeout="onTimeout"
         @tick="onTick"
     />
-    <transition>
-        <question-card
-            v-if="currentQuestion"
-            :question="currentQuestion.question"
-            :answers="answers"
-            @answered="onAnswered"
-        />
-    </transition>
+    <question-card
+        v-if="currentQuestion"
+        :question="currentQuestion.question"
+        :answers="answers"
+        @answered="onAnswered"
+    />
     <lifeline-area class="mt-3" :lifelines="lifelines" @lifeline="onLifelineUsed" />
 </template>
 
@@ -38,9 +36,9 @@ export default {
     setup() {
         const { questions, addUserAnswer, endGame, lifelines, consumeLifeline } = useGame();
         const questionIndex = ref(0);
+        const currentQuestion = computed(() => questions.value[questionIndex.value]);
         const timerElapsedMilliSeconds = ref(0);
         const timerMaxMilliSeconds = ref(TIME_LIMIT_SECONDS * 1000);
-        const currentQuestion = computed(() => questions.value[questionIndex.value]);
 
         // Advance question or end game
         const doNextQuestion = () => {
@@ -86,6 +84,7 @@ export default {
             consumeLifeline(lifeline.id);
         };
 
+        // Keep track of elapsed time for statistics
         const onTick = (elapsed) => (timerElapsedMilliSeconds.value = elapsed);
         // Time ran out, user didn't answer on time
         const onTimeout = () => doNextQuestion();
@@ -105,19 +104,3 @@ export default {
     },
 };
 </script>
-
-<style>
-/* Enter and leave animations can use different */
-/* durations and timing functions.              */
-.slide-fade-enter-active {
-    transition: all 0.3s ease;
-}
-.slide-fade-leave-active {
-    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-    transform: translateX(10px);
-    opacity: 0;
-}
-</style>
