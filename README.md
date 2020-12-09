@@ -21,6 +21,7 @@ yarn test:unit
 ```
 
 #### Run your end-to-end tests
+First, start the devserver, then run
 
 ```
 yarn test:e2e
