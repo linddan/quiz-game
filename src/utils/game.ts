@@ -1,4 +1,3 @@
-import { unescape } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { Lifeline, LifelineType, AlienQuestion, Question, UserAnswer } from '@/types/types';
 
@@ -55,6 +54,17 @@ export const getNextUnansweredQuestion = (questions: Question[]) =>
 export const getNoOfUnansweredQuestions = (questions: Question[]) =>
     questions.filter(isQuestionUnanswered).length;
 
+export const unescape = (string: string) => {
+    const parsedString = new DOMParser().parseFromString(string, 'text/html').querySelector('html');
+    if (parsedString === null) {
+        return string;
+    }
+    if (parsedString.textContent === null) {
+        return string;
+    }
+    return parsedString.textContent;
+};
+
 export const normalizeQuestions = (alienQuestions: AlienQuestion[]): Question[] =>
     alienQuestions.map(
         (alienQuestion: AlienQuestion): Question => {
@@ -68,11 +78,11 @@ export const normalizeQuestions = (alienQuestions: AlienQuestion[]): Question[] 
 
             return {
                 id: uuid(),
-                category,
+                category: unescape(category),
                 difficulty,
                 question: unescape(question),
-                correctAnswer,
-                incorrectAnswers,
+                correctAnswer: unescape(correctAnswer),
+                incorrectAnswers: incorrectAnswers.map(unescape),
                 userAnswer: null,
             };
         }

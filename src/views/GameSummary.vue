@@ -5,39 +5,27 @@
     <div class="box mt-5">
         <table class="table is-bordered is-fullwidth is-striped">
             <tr>
-                <td>
-                    <strong>Number of correct answers:</strong>
-                </td>
+                <td><strong>Number of correct answers:</strong></td>
                 <td>{{ noOfCorrectAnswers }}</td>
             </tr>
             <tr>
-                <td>
-                    <strong>Number of incorrect answers:</strong>
-                </td>
+                <td><strong>Number of incorrect answers:</strong></td>
                 <td>{{ noOfIncorrectAnswers }}</td>
             </tr>
             <tr>
-                <td>
-                    <strong>Number of unanswered questions:</strong>
-                </td>
+                <td><strong>Number of unanswered questions:</strong></td>
                 <td>{{ noOfUnansweredQuestions }}</td>
             </tr>
             <tr v-if="shouldDisplayStat(averageTimePerQuestion)">
-                <td>
-                    <strong>Average time per question:</strong>
-                </td>
+                <td><strong>Average time per question:</strong></td>
                 <td>{{ averageTimePerQuestion }} seconds</td>
             </tr>
             <tr v-if="shouldDisplayStat(quickestAnswer)">
-                <td>
-                    <strong>Quickest answer:</strong>
-                </td>
+                <td><strong>Quickest answer:</strong></td>
                 <td>{{ quickestAnswer }} seconds</td>
             </tr>
             <tr v-if="shouldDisplayStat(slowestAnswer)">
-                <td>
-                    <strong>Slowest answer:</strong>
-                </td>
+                <td><strong>Slowest answer:</strong></td>
                 <td>{{ slowestAnswer }} seconds</td>
             </tr>
         </table>
@@ -61,6 +49,7 @@ import { computed } from 'vue';
 export default {
     setup() {
         const { userAnswers, resetGame, questions } = useGame();
+
         const onClick = () => {
             resetGame();
             router.push({ name: GAME_MENU });
