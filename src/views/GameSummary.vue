@@ -22,20 +22,20 @@
                 </td>
                 <td>{{ noOfUnansweredQuestions }}</td>
             </tr>
-            <tr>
-                <td v-if="shouldDisplayStat(averageTimePerQuestion)">
+            <tr v-if="shouldDisplayStat(averageTimePerQuestion)">
+                <td>
                     <strong>Average time per question:</strong>
                 </td>
                 <td>{{ averageTimePerQuestion }} seconds</td>
             </tr>
-            <tr>
-                <td v-if="shouldDisplayStat(quickestAnswer)">
+            <tr v-if="shouldDisplayStat(quickestAnswer)">
+                <td>
                     <strong>Quickest answer:</strong>
                 </td>
                 <td>{{ quickestAnswer }} seconds</td>
             </tr>
-            <tr>
-                <td v-if="shouldDisplayStat(slowestAnswer)">
+            <tr v-if="shouldDisplayStat(slowestAnswer)">
+                <td>
                     <strong>Slowest answer:</strong>
                 </td>
                 <td>{{ slowestAnswer }} seconds</td>

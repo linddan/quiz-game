@@ -15,6 +15,10 @@ export const createPlusTenLifeline = (): Lifeline => ({
     isUsed: false,
     name: '+10s',
 });
+
+export const isFiftyFiftyLifeline = ({ type }: Lifeline) => type === LifelineType.FiftyFifty;
+export const isPlusTenLifeline = ({ type }: Lifeline) => type === LifelineType.PlusTen;
+
 export const getRoundedTime = (time: number) => Math.round(time * 10) / 10;
 
 const isCorrectAnswer = ({ isCorrect }: UserAnswer) => isCorrect === true;

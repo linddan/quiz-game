@@ -2,7 +2,12 @@
     <h1 class="is-size-1 has-text-weight-bold has-text-centered">
         Question #{{ questionIndex + 1 }}
     </h1>
-    <countdown-bar :value="elapsedMilliSeconds" :max="maxMilliSeconds" />
+    <countdown-bar
+        :startValue="timerElapsedMilliSeconds"
+        :max="timerMaxMilliSeconds"
+        :key="questionIndex"
+        @timeout="onTimeout"
+    />
     <transition>
         <question-card
             v-if="currentQuestion"
@@ -15,48 +20,40 @@
 </template>
 
 <script>
-import { computed, onUnmounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { shuffle } from 'lodash';
 import { GAME_SUMMARY, router } from '@/router';
 import useGame from '@/composables/useGame';
 import QuestionCard from '../components/QuestionCard.vue';
 import CountdownBar from '@/components/CountdownBar.vue';
 import LifelineArea from '@/components/LifelineArea.vue';
-import { getRoundedTime } from '@/utils/game';
+import { getRoundedTime, isFiftyFiftyLifeline, isPlusTenLifeline } from '@/utils/game';
 
 const TIME_LIMIT_SECONDS = 15;
+const TEN_SECONDS = 10;
+const ONE_S_IN_MS = 1000;
 
 export default {
     components: { QuestionCard, CountdownBar, LifelineArea },
     setup() {
         const { questions, addUserAnswer, endGame, lifelines, consumeLifeline } = useGame();
         const questionIndex = ref(0);
-        const elapsedMilliSeconds = ref(0);
-        const maxMilliSeconds = ref(TIME_LIMIT_SECONDS * 1000);
+        const timerElapsedMilliSeconds = ref(0);
+        const timerMaxMilliSeconds = ref(TIME_LIMIT_SECONDS * 1000);
         const currentQuestion = computed(() => questions.value[questionIndex.value]);
 
         // Advance question or end game
         const doNextQuestion = () => {
+            timerMaxMilliSeconds.value = TIME_LIMIT_SECONDS * 1000;
             if (questionIndex.value + 1 < questions.value.length) {
-                // Show next question
+                // Show next question. This also resets the counter since it is remounted
+                // due to it having a "key" attribute bound to the question index.
                 questionIndex.value++;
-                // Reset time (and max, in case +10s lifeline was used)
-                elapsedMilliSeconds.value = 0;
-                maxMilliSeconds.value = TIME_LIMIT_SECONDS * 1000;
             } else {
                 endGame();
                 router.push({ name: GAME_SUMMARY });
             }
         };
-
-        const timer = setInterval(() => {
-            if (elapsedMilliSeconds.value < maxMilliSeconds.value) {
-                elapsedMilliSeconds.value += 100;
-            } else {
-                // Time ran out
-                doNextQuestion();
-            }
-        }, 100);
 
         // Compile the answers and shuffle them
         const answers = computed(() =>
@@ -71,38 +68,36 @@ export default {
             addUserAnswer({
                 questionId: currentQuestion.value.id,
                 isCorrect: currentQuestion.value.correctAnswer === userChoice,
-                time: getRoundedTime(elapsedMilliSeconds.value / 1000),
+                time: getRoundedTime(timerElapsedMilliSeconds.value / ONE_S_IN_MS),
             });
             doNextQuestion();
         };
 
         // Lifeline was used
         const onLifelineUsed = (lifeline) => {
-            if (lifeline.type === 'FIFTY_FIFTY') {
+            if (isFiftyFiftyLifeline(lifeline)) {
                 currentQuestion.value.incorrectAnswers = currentQuestion.value.incorrectAnswers.slice(
                     2
                 );
-            } else if (lifeline.type === 'PLUS_TEN') {
-                // TODO: Handle max correctly
-                elapsedMilliSeconds.value -= 10000;
-                maxMilliSeconds.value += 10000;
+            } else if (isPlusTenLifeline(lifeline)) {
+                timerMaxMilliSeconds.value += TEN_SECONDS * ONE_S_IN_MS;
             }
             // TODO: We don't need to use an id. Just type.
             consumeLifeline(lifeline.id);
         };
 
-        onUnmounted(() => {
-            clearInterval(timer);
-        });
+        // Time ran out, user didn't answer on time
+        const onTimeout = () => doNextQuestion();
 
         return {
             currentQuestion,
             answers,
             onAnswered,
+            onTimeout,
             onLifelineUsed,
             questionIndex,
-            elapsedMilliSeconds,
-            maxMilliSeconds,
+            timerElapsedMilliSeconds,
+            timerMaxMilliSeconds,
             lifelines,
         };
     },
