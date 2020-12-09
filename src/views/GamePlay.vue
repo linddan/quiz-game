@@ -3,10 +3,10 @@
         Question #{{ questionIndex + 1 }}
     </h1>
     <countdown-bar
-        :startValue="timerElapsedMilliSeconds"
         :max="timerMaxMilliSeconds"
         :key="questionIndex"
         @timeout="onTimeout"
+        @tick="onTick"
     />
     <transition>
         <question-card
@@ -86,6 +86,7 @@ export default {
             consumeLifeline(lifeline.id);
         };
 
+        const onTick = (elapsed) => (timerElapsedMilliSeconds.value = elapsed);
         // Time ran out, user didn't answer on time
         const onTimeout = () => doNextQuestion();
 
@@ -93,6 +94,7 @@ export default {
             currentQuestion,
             answers,
             onAnswered,
+            onTick,
             onTimeout,
             onLifelineUsed,
             questionIndex,

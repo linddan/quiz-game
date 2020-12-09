@@ -11,16 +11,16 @@ export default {
     emits: ['timeout', 'tick'],
     props: {
         max: Number,
-        startValue: Number,
     },
 
     setup(props, context) {
-        const elapsed = ref(props.startValue);
+        const elapsed = ref(0);
         const timer = setInterval(() => {
             elapsed.value += TIME_INCREMENT_MS;
             if (elapsed.value > props.max) {
                 context.emit('timeout');
             }
+            context.emit('tick', elapsed.value);
         }, 100);
         const timeLeft = computed(() => Math.ceil((props.max - elapsed.value) / 1000));
 
