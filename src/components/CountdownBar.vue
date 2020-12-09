@@ -1,6 +1,8 @@
 <template>
-    <p class="title has-text-centered">{{ timeLeft }}</p>
-    <progress class="is-small progress" :value="max - elapsed" :max="max" />
+    <div class="is-flex is-flex-wrap-nowrap	is-flex-direction-row is-align-items-baseline">
+        <progress class="is-small progress" :value="max - elapsed" :max="max" />
+        <div class="title has-text-centered timeLeft">{{ timeLeft }}</div>
+    </div>
 </template>
 
 <script>
@@ -33,4 +35,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.timeLeft {
+    width: 100px;
+}
+</style>
