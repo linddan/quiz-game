@@ -1,4 +1,4 @@
-import { AlienQuestion, Category, Question, UseQuestions, UseQuestionsState } from '@/types/types';
+import { Category, Question, UseQuestions, UseQuestionsState } from '@/types/types';
 import { normalizeCategories, normalizeQuestions } from '@/utils/game';
 import { computed, reactive } from 'vue';
 
@@ -13,21 +13,16 @@ export default (): UseQuestions => {
     });
 
     // Mutations
-    const setQuestions = (questions: Question[]) => {
-        state.questions = questions;
-    };
-    const setCategories = (categories: Category[]) => {
-        state.categories = categories;
-    };
-    const setError = (error: string) => {
-        state.error = error;
-    };
+    const setQuestions = (questions: Question[]) => (state.questions = questions);
+    const setCategories = (categories: Category[]) => (state.categories = categories);
+    const setError = (error: string) => (state.error = error);
 
     // Actions
     const fetchQuestions = async (categoryId: number) => {
         let fetchQuestionsURL = `${OPENTDB_URL}?amount=10&type=multiple`;
         try {
             if (categoryId !== -1) {
+                // -1 is all categories, so we don't specify a category in our call.
                 fetchQuestionsURL = fetchQuestionsURL.concat(`&category=${categoryId}`);
             }
             const response = await fetch(fetchQuestionsURL);
