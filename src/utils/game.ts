@@ -54,14 +54,6 @@ export const getStatistics = (userAnswers: UserAnswer[], questions: Question[]) 
     };
 };
 
-export const isQuestionUnanswered = ({ userAnswer }: Question) => userAnswer === null;
-
-export const getNextUnansweredQuestion = (questions: Question[]) =>
-    questions.find(isQuestionUnanswered) || null;
-
-export const getNoOfUnansweredQuestions = (questions: Question[]) =>
-    questions.filter(isQuestionUnanswered).length;
-
 export const unescape = (string: string) => {
     const parsedString = new DOMParser().parseFromString(string, 'text/html').querySelector('html');
     if (parsedString === null) {
@@ -91,7 +83,6 @@ export const normalizeQuestions = (alienQuestions: AlienQuestion[]): Question[] 
                 question: unescape(question),
                 correctAnswer: unescape(correctAnswer),
                 incorrectAnswers: incorrectAnswers.map(unescape),
-                userAnswer: null,
             };
         }
     );

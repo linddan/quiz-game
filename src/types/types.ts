@@ -24,7 +24,6 @@ export interface Question {
     question: string;
     correctAnswer: string;
     incorrectAnswers: string[];
-    userAnswer: UserAnswer | null;
 }
 
 export interface AlienQuestion {
@@ -65,7 +64,6 @@ export interface UseGame {
     questions: ComputedRef<Question[]>;
     userAnswers: ComputedRef<UserAnswer[]>;
     lifelines: ComputedRef<Lifeline[]>;
-    currentQuestion: ComputedRef<Question | null>;
     isGamePlaying: ComputedRef<boolean>;
     isGameFinished: ComputedRef<boolean>;
     startGame: () => void;

@@ -1,10 +1,6 @@
 import { reactive, computed } from 'vue';
 import { UseGameState, GameState, Question, UserAnswer, UseGame, Lifeline } from '@/types/types';
-import {
-    createFiftyFiftyLifeline,
-    createPlusTenLifeline,
-    getNextUnansweredQuestion,
-} from '@/utils/game';
+import { createFiftyFiftyLifeline, createPlusTenLifeline } from '@/utils/game';
 import { orderBy } from 'lodash';
 
 const state: UseGameState = reactive({
@@ -52,7 +48,6 @@ export default (): UseGame => {
     const questions = computed(() => state.questions);
     const userAnswers = computed(() => state.userAnswers);
     const lifelines = computed(() => state.lifelines);
-    const currentQuestion = computed(() => getNextUnansweredQuestion(state.questions));
     const isGamePlaying = computed(() => state.gameState === GameState.Playing);
     const isGameFinished = computed(() => state.gameState === GameState.Finished);
 
@@ -60,7 +55,6 @@ export default (): UseGame => {
         questions,
         userAnswers,
         lifelines,
-        currentQuestion,
         isGamePlaying,
         isGameFinished,
         startGame,

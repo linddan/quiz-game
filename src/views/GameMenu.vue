@@ -69,7 +69,6 @@ export default {
         };
         const onClickCategory = (id) => {
             selectedCategoryId.value = id;
-            console.log(selectedCategoryId.value);
         };
 
         return {
