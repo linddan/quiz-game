@@ -1,11 +1,12 @@
 <template>
     <h1 class="is-size-1 has-text-centered has-text-weight-bold	">Quizzy</h1>
     <p class="is-size-4 has-text-centered">A trivia game</p>
-    <p class="has-text-centered">
-        You will be presented with 10 questions in the selected category. You have 15 seconds to
-        answer each question.
+    <p class="has-text-centered mt-4">
+        You will be presented with 10 questions in the selected category and you have 15 seconds to
+        answer each question. Two lifelines exist on the bottom of the screen; one will give you an
+        additional ten seconds of time and the other eliminates two wrong anwsers. But use them
+        wisely, you only get to use them once! Good luck!
     </p>
-    <p class="has-text-centered">Good luck!</p>
     <div class="box mt-5">
         <p class="subtitle">Choose category</p>
         <div class="columns is-multiline is-mobile">
