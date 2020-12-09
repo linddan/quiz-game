@@ -32,11 +32,11 @@ const isCorrectAnswer = ({ isCorrect }: UserAnswer) => isCorrect === true;
 const isIncorrectAnswer = ({ isCorrect }: UserAnswer) => isCorrect === false;
 const pickTime = ({ time }: UserAnswer) => time;
 
-export const getStatistics = (userAnswers: UserAnswer[], questions: Question[]) => {
+export const getStatistics = (userAnswers: UserAnswer[], noOfQuestions: number) => {
     const allTimes = userAnswers.map(pickTime);
     const noOfCorrectAnswers = userAnswers.filter(isCorrectAnswer).length;
     const noOfIncorrectAnswers = userAnswers.filter(isIncorrectAnswer).length;
-    const noOfUnansweredQuestions = questions.length - noOfCorrectAnswers - noOfIncorrectAnswers;
+    const noOfUnansweredQuestions = noOfQuestions - noOfCorrectAnswers - noOfIncorrectAnswers;
     const quickestAnswer = allTimes.length > 0 ? allTimes.sort((a, b) => b - a).pop() : -1;
     const slowestAnswer = allTimes.length > 0 ? allTimes.sort((a, b) => a - b).pop() : -1;
     const averageTimePerQuestion =

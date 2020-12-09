@@ -64,7 +64,7 @@ export default {
             averageTimePerQuestion,
             quickestAnswer,
             slowestAnswer,
-        } = getStatistics(userAnswers.value, questions.value);
+        } = getStatistics(userAnswers.value, questions.value.length);
 
         const message = computed(() => {
             const negResult = noOfIncorrectAnswers + noOfUnansweredQuestions;
